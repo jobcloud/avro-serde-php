@@ -32,7 +32,7 @@
   "require": {
     "php": "^8.2",
     "beberlei/assert": "^2.9.9|^3.0.0",
-    "flix-tech/confluent-schema-registry-api": "^8.2.1",
+    "flix-tech/confluent-schema-registry-api": "^8.2.2",
     "guzzlehttp/promises": "^1.4.0|^2.0.0|^3.1.0",
     "flix-tech/avro-php": "^5.1.0",
     "widmogrod/php-functional": "^6.0.0|^7.0.0"
