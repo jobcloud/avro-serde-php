@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FlixTech\AvroSerializer\Test\Objects\SchemaResolvers;
 
 use FlixTech\AvroSerializer\Objects\SchemaResolverInterface;

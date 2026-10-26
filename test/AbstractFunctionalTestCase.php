@@ -12,29 +12,29 @@ abstract class AbstractFunctionalTestCase extends TestCase
     public const SCHEMA_ID = 9999;
     public const SCHEMA_JSON = /** @lang JSON */
         <<<JSON
-{
-  "type": "record",
-  "name": "user",
-  "fields": [
-    {"name": "name", "type": "string"},
-    {"name": "age", "type": "int"}
-  ]
-}
-JSON;
+            {
+              "type": "record",
+              "name": "user",
+              "fields": [
+                {"name": "name", "type": "string"},
+                {"name": "age", "type": "int"}
+              ]
+            }
+            JSON;
     public const READERS_SCHEMA_JSON = /** @lang JSON */
         <<<JSON
-{
-  "type": "record",
-  "name": "user",
-  "fields": [
-    {"name": "age", "type": "int"}
-  ]
-}
-JSON;
+            {
+              "type": "record",
+              "name": "user",
+              "fields": [
+                {"name": "age", "type": "int"}
+              ]
+            }
+            JSON;
     public const INVALID_READERS_SCHEMA_JSON = /** @lang JSON */
         <<<JSON
-{"type": "enum", "name": "Foo", "symbols": ["A", "B", "C", "D"] }
-JSON;
+            {"type": "enum", "name": "Foo", "symbols": ["A", "B", "C", "D"] }
+            JSON;
     public const INVALID_TEST_RECORD = [
         'first_name' => 'Thomas',
         'birth_date' => '1980-10-17',

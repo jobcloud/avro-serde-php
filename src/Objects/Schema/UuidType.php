@@ -10,7 +10,7 @@ class UuidType extends LogicalType
     {
         parent::__construct(
             TypeName::UUID,
-            TypeName::STRING
+            TypeName::STRING,
         );
     }
 }

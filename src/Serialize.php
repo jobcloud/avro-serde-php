@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FlixTech\AvroSerializer\Serialize;
 
 use FlixTech\AvroSerializer\Objects\Exceptions\Exceptions;
@@ -60,10 +62,10 @@ function writeDatum(\AvroIODatumWriter $writer, \AvroStringIO $io, \AvroSchema $
         },
         static function (\AvroException $e) use ($record, $schema) {
             return Left::of(
-                Exceptions::forEncode($record, $schema, $e)
+                Exceptions::forEncode($record, $schema, $e),
             );
         },
-        $record
+        $record,
     );
 }
 
@@ -99,9 +101,9 @@ function readDatum(
         },
         static function (\AvroException $e) use ($data) {
             return Left::of(
-                Exceptions::forDecode($data, $e)
+                Exceptions::forDecode($data, $e),
             );
         },
-        $data
+        $data,
     );
 }

@@ -33,7 +33,7 @@ class SchemaAttributes implements \Countable
         return \array_map(static function (SchemaAttribute $schemaAttribute) {
             return new Type(
                 $schemaAttribute->value(),
-                $schemaAttribute->attributes()
+                $schemaAttribute->attributes(),
             );
         }, $this->attributes[AttributeName::TYPE] ?? []);
     }

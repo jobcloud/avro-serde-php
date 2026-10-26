@@ -10,14 +10,18 @@ SCHEMA_REGISTRY_IPV4 ?= 172.68.0.103
 KAFKA_BROKER_IPV4 ?= 172.68.0.102
 ZOOKEEPER_IPV4 ?= 172.68.0.101
 COMPOSER ?= bin/composer.phar
-COMPOSER_VERSION ?= 2.8.4
+COMPOSER_VERSION ?= 2.10.3
 PHP_STAN ?= bin/phpstan.phar
-PHP_STAN_VERSION ?= 2.0.4
+PHP_STAN_VERSION ?= 2.3.2
 PHP_CS_FIXER ?= bin/php-cs-fixer.phar
-PHP_CS_FIXER_VERSION ?= 3.65.0
+PHP_CS_FIXER_VERSION ?= 3.95.27
 PHPUNIT ?= vendor/bin/phpunit
 PHP ?= bin/php
-PHP_VERSION ?= 8.3
+PHP_VERSION ?= 8.2
+COVERAGE_MIN ?= 100
+PLATFORM_NETWORK ?= avro-serde-php-net
+# Confluent Platform 8.0 and newer need docker-compose.kraft.yml (no ZooKeeper)
+COMPOSE_FILE ?= docker-compose.yml
 XDEBUG_VERSION ?= 3.4.0
 XDEBUG_OPTIONS ?= -d xdebug.mode=off
 export
@@ -44,22 +48,23 @@ phpstan:
 
 cs-fixer:
 	PHP_VERSION=$(PHP_VERSION) $(PHP) $(XDEBUG_OPTIONS) $(PHP_CS_FIXER) fix --config=.php-cs-fixer.dist.php --diff -v --dry-run \
-	  --path-mode=intersection --allow-risky=yes src test
+	  --path-mode=intersection --allow-risky=yes src test integrations
 
 cs-fixer-modify:
 	PHP_VERSION=$(PHP_VERSION) $(PHP) $(XDEBUG_OPTIONS) $(PHP_CS_FIXER) fix --config=.php-cs-fixer.dist.php --diff -v \
-	  --path-mode=intersection --allow-risky=yes src test
+	  --path-mode=intersection --allow-risky=yes src test integrations
 
 phpunit:
 	PHP_VERSION=$(PHP_VERSION) $(PHP) $(XDEBUG_OPTIONS) $(PHPUNIT) --exclude-group integration
 
 phpunit-integration:
-	PHP_VERSION=$(PHP_VERSION) $(PHP) $(XDEBUG_OPTIONS) $(PHPUNIT) --group integration
+	DOCKER_NETWORK=$(PLATFORM_NETWORK) DOCKER_OPTS="$${DOCKER_OPTS:--it}" PHP_VERSION=$(PHP_VERSION) $(PHP) $(XDEBUG_OPTIONS) $(PHPUNIT) --group integration
 
 coverage:
 	mkdir -p build
 	PHP_VERSION=$(PHP_VERSION) $(PHP) -d xdebug.mode=coverage vendor/bin/phpunit --exclude-group integration \
 	  --coverage-clover=build/coverage.clover --coverage-text
+	PHP_VERSION=$(PHP_VERSION) $(PHP) -d xdebug.mode=off bin/coverage-check.php build/coverage.clover $(COVERAGE_MIN)
 
 ci-local: cs-fixer phpstan phpunit
 
@@ -77,7 +82,7 @@ install-phars:
 platform:
 	docker compose down
 	docker compose up -d
-	bin/wait-for-all.sh
+	DOCKER_NETWORK=$(PLATFORM_NETWORK) bin/wait-for-all.sh
 
 clean:
 	rm -rf build

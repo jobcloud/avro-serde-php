@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FlixTech\AvroSerializer\Test;
 
 use FlixTech\AvroSerializer\Objects\Exceptions\AvroDecodingException;
@@ -9,13 +11,6 @@ use Widmogrod\Monad\Either\Right;
 use Widmogrod\Monad\Maybe\Just;
 use Widmogrod\Monad\Maybe\Nothing;
 
-use const FlixTech\AvroSerializer\Protocol\encode;
-use const FlixTech\AvroSerializer\Protocol\PROTOCOL_ACCESSOR_AVRO;
-use const FlixTech\AvroSerializer\Protocol\PROTOCOL_ACCESSOR_SCHEMA_ID;
-use const FlixTech\AvroSerializer\Protocol\PROTOCOL_ACCESSOR_VERSION;
-use const FlixTech\AvroSerializer\Protocol\validate;
-use const FlixTech\AvroSerializer\Protocol\WIRE_FORMAT_PROTOCOL_VERSION;
-
 use function FlixTech\AvroSerializer\Protocol\decode;
 use function FlixTech\AvroSerializer\Protocol\encode;
 use function FlixTech\AvroSerializer\Protocol\encoder;
@@ -23,6 +18,13 @@ use function FlixTech\AvroSerializer\Protocol\validate;
 use function FlixTech\AvroSerializer\Protocol\validator;
 use function FlixTech\AvroSerializer\Protocol\version;
 use function Widmogrod\Functional\curryN;
+
+use const FlixTech\AvroSerializer\Protocol\encode;
+use const FlixTech\AvroSerializer\Protocol\PROTOCOL_ACCESSOR_AVRO;
+use const FlixTech\AvroSerializer\Protocol\PROTOCOL_ACCESSOR_SCHEMA_ID;
+use const FlixTech\AvroSerializer\Protocol\PROTOCOL_ACCESSOR_VERSION;
+use const FlixTech\AvroSerializer\Protocol\validate;
+use const FlixTech\AvroSerializer\Protocol\WIRE_FORMAT_PROTOCOL_VERSION;
 
 class ProtocolTest extends AbstractFunctionalTestCase
 {
@@ -51,7 +53,7 @@ class ProtocolTest extends AbstractFunctionalTestCase
 
         $this->assertEquals(
             curryN(3, encode)(WIRE_FORMAT_PROTOCOL_VERSION),
-            $encoder
+            $encoder,
         );
     }
 
@@ -86,7 +88,7 @@ class ProtocolTest extends AbstractFunctionalTestCase
     {
         $this->assertEquals(
             curryN(2, validate)(WIRE_FORMAT_PROTOCOL_VERSION),
-            validator(WIRE_FORMAT_PROTOCOL_VERSION)
+            validator(WIRE_FORMAT_PROTOCOL_VERSION),
         );
     }
 

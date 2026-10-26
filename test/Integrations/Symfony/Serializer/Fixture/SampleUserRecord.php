@@ -19,4 +19,9 @@ class SampleUserRecord
      * @SerDe\AvroType("string")
      */
     private $name;
+
+    /**
+     * @SerDe\AvroType("string")
+     */
+    private $other;
 }

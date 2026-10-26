@@ -47,6 +47,7 @@ services:
 
 networks:
   schema-registry-net:
+    name: avro-serde-php-net
     driver: bridge
     ipam:
       driver: default

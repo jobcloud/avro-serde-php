@@ -63,7 +63,7 @@ class AvroSerDeEncoderTest extends AbstractFunctionalTestCase
         $result = $this->avroSerDeEncoder->encode(
             AbstractFunctionalTestCase::TEST_RECORD,
             AvroSerDeEncoder::FORMAT_AVRO,
-            $context
+            $context,
         );
 
         $this->assertSame('success', $result);
@@ -81,7 +81,7 @@ class AvroSerDeEncoderTest extends AbstractFunctionalTestCase
 
         $result = $this->avroSerDeEncoder->decode(
             AbstractFunctionalTestCase::AVRO_ENCODED_RECORD_HEX_BIN,
-            AvroSerDeEncoder::FORMAT_AVRO
+            AvroSerDeEncoder::FORMAT_AVRO,
         );
 
         $this->assertSame('success-1', $result);
@@ -91,7 +91,7 @@ class AvroSerDeEncoderTest extends AbstractFunctionalTestCase
             AvroSerDeEncoder::FORMAT_AVRO,
             [
                 AvroSerDeEncoder::CONTEXT_DECODE_READERS_SCHEMA => $this->readersSchema,
-            ]
+            ],
         );
 
         $this->assertSame('success-2', $result);
@@ -112,7 +112,7 @@ class AvroSerDeEncoderTest extends AbstractFunctionalTestCase
         $this->avroSerDeEncoder->encode(
             AbstractFunctionalTestCase::TEST_RECORD,
             AvroSerDeEncoder::FORMAT_AVRO,
-            $context
+            $context,
         );
     }
 
@@ -131,7 +131,7 @@ class AvroSerDeEncoderTest extends AbstractFunctionalTestCase
         yield 'Missing subject in encode context' => [
             [
                 AvroSerDeEncoder::CONTEXT_ENCODE_WRITERS_SCHEMA => \AvroSchema::parse(
-                    AbstractFunctionalTestCase::SCHEMA_JSON
+                    AbstractFunctionalTestCase::SCHEMA_JSON,
                 ),
             ],
         ];
@@ -139,7 +139,7 @@ class AvroSerDeEncoderTest extends AbstractFunctionalTestCase
         yield 'Invalid type for subject in encode context' => [
             [
                 AvroSerDeEncoder::CONTEXT_ENCODE_WRITERS_SCHEMA => \AvroSchema::parse(
-                    AbstractFunctionalTestCase::SCHEMA_JSON
+                    AbstractFunctionalTestCase::SCHEMA_JSON,
                 ),
                 AvroSerDeEncoder::CONTEXT_ENCODE_SUBJECT => 42,
             ],

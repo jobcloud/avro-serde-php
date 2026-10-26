@@ -25,20 +25,20 @@ final class DefaultRecordSerializerFactory
 
         $guzzleClientOptions = \array_merge(
             $guzzleClientOptions,
-            ['base_uri' => $schemaRegistryURL]
+            ['base_uri' => $schemaRegistryURL],
         );
 
         return new RecordSerializer(
             new CachedRegistry(
                 new PromisingRegistry(
-                    new Client($guzzleClientOptions)
+                    new Client($guzzleClientOptions),
                 ),
-                $adapter ?? new AvroObjectCacheAdapter()
+                $adapter ?? new AvroObjectCacheAdapter(),
             ),
             [
                 RecordSerializer::OPTION_REGISTER_MISSING_SUBJECTS => true,
                 RecordSerializer::OPTION_REGISTER_MISSING_SCHEMAS => true,
-            ]
+            ],
         );
     }
 }

@@ -24,17 +24,35 @@ class AvroNameConverter implements AdvancedNameConverterInterface
     }
 
     /**
+     * @param array<string, mixed> $context
+     *
      * @throws \ReflectionException
      */
     public function normalize(
         string $propertyName,
-        string $class = null,
-        string $format = null,
-        array $context = []
+        ?string $class = null,
+        ?string $format = null,
+        array $context = [],
     ): string {
         return $this
             ->getNameMap($class, $format)
             ->getNormalized($propertyName);
+    }
+
+    /**
+     * @param array<string, mixed> $context
+     *
+     * @throws \ReflectionException
+     */
+    public function denormalize(
+        string $propertyName,
+        ?string $class = null,
+        ?string $format = null,
+        array $context = [],
+    ): string {
+        return $this
+            ->getNameMap($class, $format)
+            ->getDenormalized($propertyName);
     }
 
     /**
@@ -54,6 +72,8 @@ class AvroNameConverter implements AdvancedNameConverterInterface
     }
 
     /**
+     * @param class-string $class
+     *
      * @throws \ReflectionException
      */
     private function generateMap(string $class): PropertyNameMap
@@ -67,7 +87,7 @@ class AvroNameConverter implements AdvancedNameConverterInterface
         $map = array_reduce(
             $reflectionClass->getProperties(),
             [$this, 'propertyToSchemaName'],
-            new PropertyNameMap()
+            new PropertyNameMap(),
         );
 
         $this->mapCache[$class] = $map;
@@ -77,7 +97,7 @@ class AvroNameConverter implements AdvancedNameConverterInterface
 
     private function propertyToSchemaName(
         PropertyNameMap $map,
-        \ReflectionProperty $reflectionProperty
+        \ReflectionProperty $reflectionProperty,
     ): PropertyNameMap {
         $schemaAttributes = $this->attributeReader->readPropertyAttributes($reflectionProperty);
 
@@ -87,27 +107,9 @@ class AvroNameConverter implements AdvancedNameConverterInterface
 
         $attributeName = $schemaAttributes->get(AttributeName::NAME);
 
-        if (!is_string($attributeName)) {
-            return $map;
-        }
-
         return $map->add(
             $reflectionProperty->getName(),
-            $attributeName
+            $attributeName,
         );
-    }
-
-    /**
-     * @throws \ReflectionException
-     */
-    public function denormalize(
-        string $propertyName,
-        string $class = null,
-        string $format = null,
-        array $context = []
-    ): string {
-        return $this
-            ->getNameMap($class, $format)
-            ->getDenormalized($propertyName);
     }
 }

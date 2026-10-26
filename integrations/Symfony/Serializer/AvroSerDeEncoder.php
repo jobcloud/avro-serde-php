@@ -13,7 +13,7 @@ class AvroSerDeEncoder implements EncoderInterface, DecoderInterface
 {
     public const FORMAT_AVRO = 'avro_with_registry';
 
-    public const CONTEXT_ENCODE_WRITERS_SCHEMA = self:: FORMAT_AVRO . '.writers_schema';
+    public const CONTEXT_ENCODE_WRITERS_SCHEMA = self::FORMAT_AVRO . '.writers_schema';
     public const CONTEXT_ENCODE_SUBJECT = self::FORMAT_AVRO . '.subject';
     public const CONTEXT_DECODE_READERS_SCHEMA = self::FORMAT_AVRO . '.readers_schema';
 
@@ -25,7 +25,7 @@ class AvroSerDeEncoder implements EncoderInterface, DecoderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param array<string, mixed> $context
      *
      * @throws \FlixTech\SchemaRegistryApi\Exception\SchemaRegistryException
      */
@@ -43,7 +43,7 @@ class AvroSerDeEncoder implements EncoderInterface, DecoderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param array<string, mixed> $context
      *
      * @throws \AvroSchemaParseException
      * @throws \FlixTech\SchemaRegistryApi\Exception\SchemaRegistryException
@@ -55,7 +55,7 @@ class AvroSerDeEncoder implements EncoderInterface, DecoderInterface
         return $this->recordSerializer->encodeRecord(
             $context[self::CONTEXT_ENCODE_SUBJECT],
             \AvroSchema::parse($context[self::CONTEXT_ENCODE_WRITERS_SCHEMA]),
-            $data
+            $data,
         );
     }
 
@@ -64,6 +64,9 @@ class AvroSerDeEncoder implements EncoderInterface, DecoderInterface
         return self::FORMAT_AVRO === $format;
     }
 
+    /**
+     * @param array<string, mixed> $context
+     */
     private function validateEncodeContext(array $context): void
     {
         Assert::that($context)

@@ -19,7 +19,7 @@ class AvroNameConverterTest extends TestCase
     protected function setUp(): void
     {
         $this->nameConverter = new AvroNameConverter(
-            new AnnotationReader(new DoctrineAnnotationReader())
+            new AnnotationReader(new DoctrineAnnotationReader()),
         );
     }
 
@@ -37,5 +37,21 @@ class AvroNameConverterTest extends TestCase
         $normalizedName = $this->nameConverter
             ->denormalize('Name', SampleUserRecord::class, AvroSerDeEncoder::FORMAT_AVRO);
         $this->assertEquals('name', $normalizedName);
+    }
+
+    #[Test]
+    public function it_should_return_the_property_name_unchanged_without_class_or_avro_format(): void
+    {
+        $this->assertSame('name', $this->nameConverter->normalize('name'));
+        $this->assertSame('name', $this->nameConverter->normalize('name', 'UnknownClass', AvroSerDeEncoder::FORMAT_AVRO));
+        $this->assertSame('name', $this->nameConverter->normalize('name', SampleUserRecord::class, 'json'));
+    }
+
+    #[Test]
+    public function it_should_cache_the_name_map_and_keep_properties_without_avro_name(): void
+    {
+        $this->assertSame('Name', $this->nameConverter->normalize('name', SampleUserRecord::class, AvroSerDeEncoder::FORMAT_AVRO));
+        $this->assertSame('Name', $this->nameConverter->normalize('name', SampleUserRecord::class, AvroSerDeEncoder::FORMAT_AVRO));
+        $this->assertSame('other', $this->nameConverter->normalize('other', SampleUserRecord::class, AvroSerDeEncoder::FORMAT_AVRO));
     }
 }
