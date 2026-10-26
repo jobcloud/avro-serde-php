@@ -30,7 +30,7 @@ the root `composer.json`, so add both as VCS repositories and require the tagged
 ```bash
 composer config repositories.schema-registry-fork vcs https://github.com/jobcloud/schema-registry-php-client-fork
 composer config repositories.avro-serde-fork vcs https://github.com/jobcloud/avro-serde-php
-composer require 'flix-tech/avro-serde-php:^3.0.1'
+composer require 'flix-tech/avro-serde-php:^3.1.1'
 ```
 
 ## Quickstart
