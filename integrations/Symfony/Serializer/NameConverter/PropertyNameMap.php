@@ -6,7 +6,14 @@ namespace FlixTech\AvroSerializer\Integrations\Symfony\Serializer\NameConverter;
 
 class PropertyNameMap
 {
+    /**
+     * @var array<string, string>
+     */
     private array $propertyToSchemaMap = [];
+
+    /**
+     * @var array<string, string>
+     */
     private array $schemaToPropertyMap = [];
 
     public function add(string $propertyName, string $schemaName): self

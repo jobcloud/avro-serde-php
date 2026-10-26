@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FlixTech\AvroSerializer\Protocol;
 
 use FlixTech\AvroSerializer\Objects\Exceptions\AvroDecodingException;
@@ -46,9 +48,9 @@ function encode(int $protocolVersion, int $schemaId, string $avroEncodedBinarySt
                 \sprintf(
                     'Could not pack message with format "CNa*", protocol version "%d" and schema id "%d"',
                     $protocolVersion,
-                    $schemaId
-                )
-            )
+                    $schemaId,
+                ),
+            ),
         ); // @codeCoverageIgnoreEnd
 }
 
@@ -67,13 +69,13 @@ function decode(string $binaryString): Either
         'C%s/N%s/a*%s',
         PROTOCOL_ACCESSOR_VERSION,
         PROTOCOL_ACCESSOR_SCHEMA_ID,
-        PROTOCOL_ACCESSOR_AVRO
+        PROTOCOL_ACCESSOR_AVRO,
     );
 
     /** @var array<string|int,mixed>|false $unpacked */
     $unpacked = @\unpack(
         $packedFormat,
-        $binaryString
+        $binaryString,
     );
 
     /** @phpstan-ignore return.type */
@@ -81,11 +83,12 @@ function decode(string $binaryString): Either
         ? Right::of($unpacked)
         : Left::of(
             new AvroDecodingException(
-                \sprintf('Could not decode message with packed format "%s"',
-                    $packedFormat
+                \sprintf(
+                    'Could not decode message with packed format "%s"',
+                    $packedFormat,
                 ),
-                Exceptions::ERROR_DECODING
-            )
+                Exceptions::ERROR_DECODING,
+            ),
         );
 }
 

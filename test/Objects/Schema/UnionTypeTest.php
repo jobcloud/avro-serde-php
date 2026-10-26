@@ -14,7 +14,7 @@ class UnionTypeTest extends TestCase
         $serializedUnion = Schema::union(
             Schema::null(),
             Schema::string(),
-            Schema::long()
+            Schema::long(),
         )->serialize();
 
         $expectedUnion = ['null', 'string', 'long'];

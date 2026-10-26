@@ -1,11 +1,6 @@
-# Avro SerDe for PHP 8.1+
+# Avro SerDe for PHP 8.2+
 
-[![php-confluent-serde Actions Status](https://github.com/flix-tech/avro-serde-php/workflows/php-confluent-serde/badge.svg?branch=master)](https://github.com/flix-tech/avro-serde-php/actions)
-[![Maintainability](https://api.codeclimate.com/v1/badges/7500470a6812cf5a1ad5/maintainability)](https://codeclimate.com/github/flix-tech/avro-serde-php/maintainability)
-[![Test Coverage](https://api.codeclimate.com/v1/badges/7500470a6812cf5a1ad5/test_coverage)](https://codeclimate.com/github/flix-tech/avro-serde-php/test_coverage)
-[![Latest Stable Version](https://poser.pugx.org/flix-tech/avro-serde-php/version)](https://packagist.org/packages/flix-tech/avro-serde-php)
-[![Total Downloads](https://poser.pugx.org/flix-tech/avro-serde-php/downloads)](https://packagist.org/packages/flix-tech/avro-serde-php)
-[![License](https://poser.pugx.org/flix-tech/avro-serde-php/license)](https://packagist.org/packages/flix-tech/avro-serde-php)
+[![php-confluent-serde Actions Status](https://github.com/jobcloud/avro-serde-php/actions/workflows/checks.yml/badge.svg?branch=master)](https://github.com/jobcloud/avro-serde-php/actions)
 
 ## Motivation
 
@@ -20,14 +15,22 @@ validate a given schema evolution against a configurable compatibility policy.
 Unfortunately Confluent is not providing an official Avro SerDe package for PHP. This library aims to provide an Avro
 SerDe library for PHP that implements the
 [Confluent wire format](https://docs.confluent.io/current/schema-registry/docs/serializer-formatter.html#wire-format) and
-integrates FlixTech's [Schema Registry Client](https://github.com/flix-tech/schema-registry-php-client).
+integrates the [Schema Registry Client](https://github.com/jobcloud/schema-registry-php-client-fork).
+
+This is the jobcloud fork of [flix-tech/avro-serde-php](https://github.com/flix-tech/avro-serde-php). It requires PHP 8.2
+or newer and supports Guzzle 7 and 8 through the Schema Registry Client fork.
 
 ## Installation
 
 This library is using the [composer package manager](https://getcomposer.org/) for PHP.
 
+This fork and the Schema Registry Client fork are not published on Packagist. Composer only reads `repositories` from
+the root `composer.json`, so add both as VCS repositories and require the tagged version:
+
 ```bash
-composer require 'flix-tech/avro-serde-php:^2.2'
+composer config repositories.schema-registry-fork vcs https://github.com/jobcloud/schema-registry-php-client-fork
+composer config repositories.avro-serde-fork vcs https://github.com/jobcloud/avro-serde-php
+composer require 'flix-tech/avro-serde-php:^3.0.1'
 ```
 
 ## Quickstart
@@ -488,3 +491,16 @@ Further examples on the possible annotations can be seen in the [test case](test
 
 This library provides a few executable examples in the [examples](examples) folder. You should have a look to get an
 understanding how this library works.
+
+## Testing
+
+All checks run in Docker. Build the image once (`make docker`) and run `make composer-update`, then:
+
+```bash
+make ci-local                  # cs-fixer, PHPStan and unit tests
+make platform                  # start the Confluent platform (Kafka, Schema Registry)
+make phpunit-integration       # integration tests, run inside the platform's Docker network
+make clean                     # stop the platform
+```
+
+Use `PHP_VERSION=8.5 make ...` to select another PHP version (default: 8.2).

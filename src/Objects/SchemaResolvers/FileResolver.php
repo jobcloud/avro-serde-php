@@ -56,9 +56,10 @@ class FileResolver implements SchemaResolverInterface
 
     private function getFilePath(string $inflectedFileName): string
     {
-        return \sprintf('%s/%s',
+        return \sprintf(
+            '%s/%s',
             $this->baseDir,
-            $inflectedFileName
+            $inflectedFileName,
         );
     }
 }

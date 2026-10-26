@@ -11,7 +11,7 @@ class DurationType extends LogicalType
         parent::__construct(
             TypeName::DURATION,
             TypeName::FIXED,
-            ['size' => 12]
+            ['size' => 12],
         );
     }
 

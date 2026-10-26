@@ -92,7 +92,7 @@ class FileResolverTest extends TestCase
                 ->map(
                     static function ($inflectedObjectName) use ($ext) {
                         return $inflectedObjectName . $ext;
-                    }
+                    },
                 );
 
             return $inflectedString->extract();

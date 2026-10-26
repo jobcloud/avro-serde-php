@@ -13,8 +13,8 @@ class DefaultSchemaGeneratorFactory
     {
         return new SchemaGenerator(
             new Schema\Generation\AnnotationReader(
-                new AnnotationReader()
-            )
+                new AnnotationReader(),
+            ),
         );
     }
 }

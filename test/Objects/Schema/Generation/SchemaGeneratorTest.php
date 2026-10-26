@@ -13,6 +13,7 @@ use FlixTech\AvroSerializer\Test\Objects\Schema\Generation\Fixture\MapsWithCompl
 use FlixTech\AvroSerializer\Test\Objects\Schema\Generation\Fixture\PrimitiveTypes;
 use FlixTech\AvroSerializer\Test\Objects\Schema\Generation\Fixture\RecordWithComplexTypes;
 use FlixTech\AvroSerializer\Test\Objects\Schema\Generation\Fixture\RecordWithRecordType;
+use FlixTech\AvroSerializer\Test\Objects\Schema\Generation\Fixture\RecordWithUnannotatedProperty;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
@@ -24,8 +25,8 @@ class SchemaGeneratorTest extends TestCase
     {
         $this->generator = new SchemaGenerator(
             new Schema\Generation\AnnotationReader(
-                new AnnotationReader()
-            )
+                new AnnotationReader(),
+            ),
         );
     }
 
@@ -58,38 +59,38 @@ class SchemaGeneratorTest extends TestCase
             ->field(
                 'nullType',
                 Schema::null(),
-                Schema\Record\FieldOption::doc('null type')
+                Schema\Record\FieldOption::doc('null type'),
             )
             ->field(
                 'isItTrue',
                 Schema::boolean(),
-                Schema\Record\FieldOption::default(false)
+                Schema\Record\FieldOption::default(false),
             )
             ->field(
                 'intType',
-                Schema::int()
+                Schema::int(),
             )
             ->field(
                 'longType',
                 Schema::long(),
-                Schema\Record\FieldOption::orderAsc()
+                Schema\Record\FieldOption::orderAsc(),
             )
             ->field(
                 'floatType',
                 Schema::float(),
-                Schema\Record\FieldOption::aliases('foo', 'bar')
+                Schema\Record\FieldOption::aliases('foo', 'bar'),
             )
             ->field(
                 'doubleType',
-                Schema::double()
+                Schema::double(),
             )
             ->field(
                 'bytesType',
-                Schema::bytes()
+                Schema::bytes(),
             )
             ->field(
                 'stringType',
-                Schema::string()
+                Schema::string(),
             );
 
         $this->assertEquals($expected, $schema);
@@ -109,20 +110,20 @@ class SchemaGeneratorTest extends TestCase
                 'array',
                 Schema::array()
                     ->items(Schema::string())
-                    ->default(['foo', 'bar'])
+                    ->default(['foo', 'bar']),
             )
             ->field(
                 'map',
                 Schema::map()
                     ->values(Schema::int())
-                    ->default(['foo' => 42, 'bar' => 42])
+                    ->default(['foo' => 42, 'bar' => 42]),
             )
             ->field(
                 'enum',
                 Schema::enum()
                     ->name('Suit')
                     ->symbols('SPADES', 'HEARTS', 'DIAMONDS', 'CLUBS'),
-                Schema\Record\FieldOrder::asc()
+                Schema\Record\FieldOrder::asc(),
             )
             ->field(
                 'fixed',
@@ -130,11 +131,11 @@ class SchemaGeneratorTest extends TestCase
                     ->name('md5')
                     ->namespace('org.acme')
                     ->aliases('foo', 'bar')
-                    ->size(16)
+                    ->size(16),
             )
             ->field(
                 'union',
-                Schema::union(Schema::string(), Schema::int(), Schema::array()->items(Schema::string()))
+                Schema::union(Schema::string(), Schema::int(), Schema::array()->items(Schema::string())),
             );
 
         $this->assertEquals($expected, $schema);
@@ -159,15 +160,15 @@ class SchemaGeneratorTest extends TestCase
                     ->field(
                         'intType',
                         Schema::int(),
-                        Schema\Record\FieldOption::default(42)
+                        Schema\Record\FieldOption::default(42),
                     ),
             )
             ->field(
                 'unionField',
                 Schema::union(
                     Schema::null(),
-                    Schema::named('org.acme.SimpleRecord')
-                )
+                    Schema::named('org.acme.SimpleRecord'),
+                ),
             );
 
         $this->assertEquals($expected, $schema);
@@ -189,16 +190,16 @@ class SchemaGeneratorTest extends TestCase
                     ->items(
                         Schema::union(
                             Schema::string(),
-                            Schema::array()->items(Schema::string())
-                        )
-                    )
+                            Schema::array()->items(Schema::string()),
+                        ),
+                    ),
             )
             ->field(
                 'arrayWithMap',
                 Schema::array()
                     ->items(
-                        Schema::map()->values(Schema::string())
-                    )
+                        Schema::map()->values(Schema::string()),
+                    ),
             );
 
         $this->assertEquals($expected, $schema);
@@ -220,18 +221,31 @@ class SchemaGeneratorTest extends TestCase
                     ->values(
                         Schema::union(
                             Schema::string(),
-                            Schema::array()->items(Schema::string())
-                        )
-                    )
+                            Schema::array()->items(Schema::string()),
+                        ),
+                    ),
             )
             ->field(
                 'mapWithArray',
                 Schema::map()
                     ->values(
-                        Schema::array()->items(Schema::string())
-                    )
+                        Schema::array()->items(Schema::string()),
+                    ),
             );
 
         $this->assertEquals($expected, $schema);
+    }
+
+    /**
+     * @throws \ReflectionException
+     */
+    #[Test]
+    public function it_should_ignore_properties_without_annotations(): void
+    {
+        $expected = Schema::record()
+            ->name('RecordWithUnannotatedProperty')
+            ->namespace('org.acme');
+
+        $this->assertEquals($expected, $this->generator->generate(RecordWithUnannotatedProperty::class));
     }
 }

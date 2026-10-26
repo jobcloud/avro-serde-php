@@ -10,7 +10,7 @@ class DateType extends LogicalType
     {
         parent::__construct(
             TypeName::DATE,
-            TypeName::INT
+            TypeName::INT,
         );
     }
 }

@@ -14,14 +14,14 @@ final class Exceptions
         $exportedRecord = \var_export($record, true);
 
         $message = <<<MESSAGE
-Could not encode record with given Schema.
+            Could not encode record with given Schema.
 
-Record:
-"$exportedRecord"
+            Record:
+            "$exportedRecord"
 
-Schema:
-"{(string) $schema}"
-MESSAGE;
+            Schema:
+            "{(string) $schema}"
+            MESSAGE;
 
         return new AvroEncodingException($message, self::ERROR_ENCODING, $previous);
     }
@@ -30,11 +30,11 @@ MESSAGE;
     {
         $convertedMessage = \bin2hex($binaryMessage);
         $message = <<<MESSAGE
-Could not decode message.
+            Could not decode message.
 
-Binary Message (as Hex):
-"$convertedMessage"
-MESSAGE;
+            Binary Message (as Hex):
+            "$convertedMessage"
+            MESSAGE;
 
         return new AvroDecodingException($message, self::ERROR_DECODING, $previous);
     }

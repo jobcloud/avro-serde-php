@@ -13,21 +13,21 @@ class LogicalTypeTest extends TestCase
 {
     #[Test]
     #[DataProvider('provideLogicalTypes')]
-    public function it_should_serialize_simple_logical_types(Schema $type, string $expectedAnnotatedType, string $expectedLogicalType): void
+    public function it_should_serialize_simple_logical_types(callable $factory, string $expectedAnnotatedType, string $expectedLogicalType): void
     {
         $expectedSchema = [
             'type' => $expectedAnnotatedType,
             'logicalType' => $expectedLogicalType,
         ];
 
-        $this->assertEquals($expectedSchema, $type->serialize());
+        $this->assertEquals($expectedSchema, $factory()->serialize());
     }
 
     #[Test]
     #[DataProvider('provideLogicalTypes')]
-    public function it_should_parse_simple_logical_types(Schema $type, string $expectedType, string $expectedLogicalType): void
+    public function it_should_parse_simple_logical_types(callable $factory, string $expectedType, string $expectedLogicalType): void
     {
-        $parsedSchema = $type->parse();
+        $parsedSchema = $factory()->parse();
         $this->assertEquals($expectedType, $parsedSchema->type());
         $this->assertEquals($expectedLogicalType, $parsedSchema->logical_type());
     }
@@ -66,17 +66,20 @@ class LogicalTypeTest extends TestCase
         $this->assertEquals('duration', $parsedSchema->logical_type());
     }
 
+    /**
+     * @return array<string, array{callable, string, string}>
+     */
     public static function provideLogicalTypes(): array
     {
         return [
-            'uuid' => [Schema::uuid(), 'string', 'uuid'],
-            'date' => [Schema::date(), 'int', 'date'],
-            'time-millis' => [Schema::timeMillis(), 'int', 'time-millis'],
-            'time-micros' => [Schema::timeMicros(), 'long', 'time-micros'],
-            'timestamp-millis' => [Schema::timestampMillis(), 'long', 'timestamp-millis'],
-            'timestamp-micros' => [Schema::timestampMicros(), 'long', 'timestamp-micros'],
-            'local-timestamp-millis' => [Schema::localTimestampMillis(), 'long', 'local-timestamp-millis'],
-            'local-timestamp-micros' => [Schema::localTimestampMicros(), 'long', 'local-timestamp-micros'],
+            'uuid' => [static fn (): Schema => Schema::uuid(), 'string', 'uuid'],
+            'date' => [static fn (): Schema => Schema::date(), 'int', 'date'],
+            'time-millis' => [static fn (): Schema => Schema::timeMillis(), 'int', 'time-millis'],
+            'time-micros' => [static fn (): Schema => Schema::timeMicros(), 'long', 'time-micros'],
+            'timestamp-millis' => [static fn (): Schema => Schema::timestampMillis(), 'long', 'timestamp-millis'],
+            'timestamp-micros' => [static fn (): Schema => Schema::timestampMicros(), 'long', 'timestamp-micros'],
+            'local-timestamp-millis' => [static fn (): Schema => Schema::localTimestampMillis(), 'long', 'local-timestamp-millis'],
+            'local-timestamp-micros' => [static fn (): Schema => Schema::localTimestampMicros(), 'long', 'local-timestamp-micros'],
         ];
     }
 }

@@ -39,14 +39,10 @@ class SchemaGenerator
      */
     private function generateFromClass(\ReflectionClass $class, Type $type): Schema
     {
+        /** @var Schema\RecordType $schema */
         $schema = $this->schemaFromType($type);
 
-        if (!$schema instanceof Schema\RecordType) {
-            return $schema;
-        }
-
         foreach ($class->getProperties() as $property) {
-            /** @var Schema\RecordType $schema */
             $schema = $this->parseField($property, $schema);
         }
 
@@ -68,11 +64,11 @@ class SchemaGenerator
     {
         return $this->applyAttributes(
             $this->typeMapper->toSchema($type),
-            $type->getAttributes()
+            $type->getAttributes(),
         );
     }
 
-    private function parseField(\ReflectionProperty $property, Schema\RecordType $rootSchema): Schema
+    private function parseField(\ReflectionProperty $property, Schema\RecordType $rootSchema): Schema\RecordType
     {
         $attributes = $this->reader->readPropertyAttributes($property);
 
@@ -101,7 +97,7 @@ class SchemaGenerator
 
         if ($attributes->has(AttributeName::ALIASES)) {
             $fieldArgs[] = Schema\Record\FieldOption::aliases(
-                ...$attributes->get(AttributeName::ALIASES)
+                ...$attributes->get(AttributeName::ALIASES),
             );
         }
 

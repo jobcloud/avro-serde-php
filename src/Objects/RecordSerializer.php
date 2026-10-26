@@ -11,13 +11,6 @@ use FlixTech\SchemaRegistryApi\Registry;
 use GuzzleHttp\Promise\PromiseInterface;
 use Widmogrod\Monad\Either\Either;
 
-use const FlixTech\AvroSerializer\Common\get;
-use const FlixTech\AvroSerializer\Protocol\PROTOCOL_ACCESSOR_AVRO;
-use const FlixTech\AvroSerializer\Protocol\PROTOCOL_ACCESSOR_SCHEMA_ID;
-use const FlixTech\AvroSerializer\Protocol\WIRE_FORMAT_PROTOCOL_VERSION;
-use const Widmogrod\Functional\identity;
-use const Widmogrod\Functional\reThrow;
-
 use function FlixTech\AvroSerializer\Common\memoize;
 use function FlixTech\AvroSerializer\Protocol\decode;
 use function FlixTech\AvroSerializer\Protocol\encoder;
@@ -26,6 +19,13 @@ use function FlixTech\AvroSerializer\Serialize\avroDatumReader;
 use function FlixTech\AvroSerializer\Serialize\avroDatumWriter;
 use function Widmogrod\Functional\curryN;
 use function Widmogrod\Functional\valueOf;
+
+use const FlixTech\AvroSerializer\Common\get;
+use const FlixTech\AvroSerializer\Protocol\PROTOCOL_ACCESSOR_AVRO;
+use const FlixTech\AvroSerializer\Protocol\PROTOCOL_ACCESSOR_SCHEMA_ID;
+use const FlixTech\AvroSerializer\Protocol\WIRE_FORMAT_PROTOCOL_VERSION;
+use const Widmogrod\Functional\identity;
+use const Widmogrod\Functional\reThrow;
 
 class RecordSerializer
 {
@@ -122,7 +122,7 @@ class RecordSerializer
         $schemaId = valueOf($decoded->bind($this->schemaIdGetter));
         /** @var \AvroSchema $writersSchema */
         $writersSchema = $this->extractValueFromRegistryResponse($this->registry->schemaForId($schemaId));
-        $readersSchema = $readersSchema ?? $writersSchema;
+        $readersSchema ??= $writersSchema;
         $cachedReader = memoize($this->datumReaderFactoryFunc, [$writersSchema], 'reader_' . $schemaId);
 
         /** @var \Widmogrod\Monad\Maybe\Maybe $validated */
@@ -130,7 +130,9 @@ class RecordSerializer
 
         /** @var Either $read */
         $read = $validated
-            ->orElse(static function () { throw new \InvalidArgumentException('Could not validate message wire protocol.'); })
+            ->orElse(static function () {
+                throw new \InvalidArgumentException('Could not validate message wire protocol.');
+            })
             ->bind($this->avroBinaryGetter)
             ->bind($cachedReader($readersSchema));
 

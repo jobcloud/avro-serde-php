@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FlixTech\AvroSerializer\Test\Objects\SchemaResolvers;
 
 use FlixTech\AvroSerializer\Objects\HasSchemaDefinitionInterface;
@@ -20,23 +22,23 @@ class DefinitionInterfaceResolverTest extends TestCase
 
         $this->assertEquals(
             \AvroSchema::parse('{"type": "string"}'),
-            $definitionInterfaceResolver->valueSchemaFor($definitionClass)
+            $definitionInterfaceResolver->valueSchemaFor($definitionClass),
         );
 
         $this->assertNull($definitionInterfaceResolver->keySchemaFor($definitionClass));
 
         $definitionClass = $this->createAnonymousDefinitionInterface(
-            '{"type": "int"}'
+            '{"type": "int"}',
         );
 
         $this->assertEquals(
             \AvroSchema::parse('{"type": "string"}'),
-            $definitionInterfaceResolver->valueSchemaFor($definitionClass)
+            $definitionInterfaceResolver->valueSchemaFor($definitionClass),
         );
 
         $this->assertEquals(
             \AvroSchema::parse('{"type": "int"}'),
-            $definitionInterfaceResolver->keySchemaFor($definitionClass)
+            $definitionInterfaceResolver->keySchemaFor($definitionClass),
         );
     }
 
@@ -66,7 +68,7 @@ class DefinitionInterfaceResolverTest extends TestCase
 
     private function createAnonymousDefinitionInterface(?string $keySchema = null): HasSchemaDefinitionInterface
     {
-        $class = new class implements HasSchemaDefinitionInterface {
+        $class = new class () implements HasSchemaDefinitionInterface {
             public static string $valueSchema;
 
             public static ?string $keySchema;

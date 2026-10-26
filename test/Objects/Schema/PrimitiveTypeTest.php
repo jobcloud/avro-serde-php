@@ -12,6 +12,12 @@ use PHPUnit\Framework\TestCase;
 class PrimitiveTypeTest extends TestCase
 {
     #[Test]
+    public function it_should_serialize_named_types_to_their_name(): void
+    {
+        $this->assertSame('org.acme.User', Schema::named('org.acme.User')->serialize());
+    }
+
+    #[Test]
     #[DataProvider('providePrimitiveTypes')]
     public function it_should_serialize_primitive_types(Schema $type, string $expectedName): void
     {

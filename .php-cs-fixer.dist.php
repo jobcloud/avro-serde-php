@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 $finder = PhpCsFixer\Finder::create()
-    ->in(['src', 'test'])
+    ->in(['src', 'test', 'integrations'])
 ;
 
 return (new PhpCsFixer\Config())
@@ -15,7 +15,27 @@ return (new PhpCsFixer\Config())
         ],
         'phpdoc_summary' => false,
         'phpdoc_to_comment' => false,
-        'yoda_style' => true,
+        '@PSR12' => true,
+        'declare_strict_types' => true,
+        'single_quote' => true,
+        'yoda_style' => [
+            'equal' => true,
+            'identical' => true,
+        ],
+        'blank_line_before_statement' => [
+            'statements' => ['for', 'foreach', 'if', 'return', 'switch'],
+        ],
+        'class_attributes_separation' => [
+            'elements' => ['method' => 'one'],
+        ],
+        'trailing_comma_in_multiline' => [
+            'elements' => ['arrays', 'arguments', 'parameters'],
+        ],
+        'no_empty_phpdoc' => true,
+        'phpdoc_trim' => true,
+        'phpdoc_no_empty_return' => true,
+        'phpdoc_scalar' => true,
+        'no_unused_imports' => true,
         'concat_space' => ['spacing' => 'one'],
         'array_syntax' => ['syntax' => 'short'],
         'list_syntax' => ['syntax' => 'short'],

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace FlixTech\AvroSerializer\Common;
 
 use Widmogrod\Monad\Maybe\Maybe;
@@ -51,7 +53,7 @@ function memoize(?callable $callback = null, array $arguments = [], string|int|n
         return null;
     }
 
-    $key = $key ?? \md5(\serialize($arguments));
+    $key ??= \md5(\serialize($arguments));
 
     if (!\array_key_exists($key, $storage) && !isset($storage[$key])) {
         $storage[$key] = $callback(...$arguments);
