@@ -42,7 +42,7 @@
     "phpunit/phpunit": "^11.5.57",
     "phpbench/phpbench": "^1.7.0",
     "vlucas/phpdotenv": "^5.8.0",
-    "symfony/serializer": "^5.4.54|^6.4.47|^7.4.21",
+    "symfony/serializer": "^5.4.54|^6.4.47|^7.4.22",
     "doctrine/annotations": "^2.0.2",
     "phpoption/phpoption": "^1.10.0"
   },
@@ -67,5 +67,8 @@
       "FlixTech\\AvroSerializer\\Benchmarks\\": "benchmarks/",
       "FlixTech\\AvroSerializer\\Examples\\": "examples/"
     }
+  },
+  "config": {
+    "bump-after-update": "dev"
   }
 }
