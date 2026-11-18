@@ -72,14 +72,14 @@ class LogicalTypeTest extends TestCase
     public static function provideLogicalTypes(): array
     {
         return [
-            'uuid' => [static fn (): Schema => Schema::uuid(), 'string', 'uuid'],
-            'date' => [static fn (): Schema => Schema::date(), 'int', 'date'],
-            'time-millis' => [static fn (): Schema => Schema::timeMillis(), 'int', 'time-millis'],
-            'time-micros' => [static fn (): Schema => Schema::timeMicros(), 'long', 'time-micros'],
-            'timestamp-millis' => [static fn (): Schema => Schema::timestampMillis(), 'long', 'timestamp-millis'],
-            'timestamp-micros' => [static fn (): Schema => Schema::timestampMicros(), 'long', 'timestamp-micros'],
-            'local-timestamp-millis' => [static fn (): Schema => Schema::localTimestampMillis(), 'long', 'local-timestamp-millis'],
-            'local-timestamp-micros' => [static fn (): Schema => Schema::localTimestampMicros(), 'long', 'local-timestamp-micros'],
+            'uuid' => [static fn(): Schema => Schema::uuid(), 'string', 'uuid'],
+            'date' => [static fn(): Schema => Schema::date(), 'int', 'date'],
+            'time-millis' => [static fn(): Schema => Schema::timeMillis(), 'int', 'time-millis'],
+            'time-micros' => [static fn(): Schema => Schema::timeMicros(), 'long', 'time-micros'],
+            'timestamp-millis' => [static fn(): Schema => Schema::timestampMillis(), 'long', 'timestamp-millis'],
+            'timestamp-micros' => [static fn(): Schema => Schema::timestampMicros(), 'long', 'timestamp-micros'],
+            'local-timestamp-millis' => [static fn(): Schema => Schema::localTimestampMillis(), 'long', 'local-timestamp-millis'],
+            'local-timestamp-micros' => [static fn(): Schema => Schema::localTimestampMicros(), 'long', 'local-timestamp-micros'],
         ];
     }
 }
