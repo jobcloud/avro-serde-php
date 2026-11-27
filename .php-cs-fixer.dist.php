@@ -29,8 +29,13 @@ return (new PhpCsFixer\Config())
             'elements' => ['method' => 'one'],
         ],
         'trailing_comma_in_multiline' => [
-            'elements' => ['arrays', 'arguments', 'parameters'],
+            'elements' => ['arguments', 'arrays', 'match', 'parameters'],
         ],
+        'function_declaration' => [
+            'closure_function_spacing' => 'one',
+            'closure_fn_spacing' => 'none',
+        ],
+        'class_definition' => ['space_before_parenthesis' => false],
         'no_empty_phpdoc' => true,
         'phpdoc_trim' => true,
         'phpdoc_no_empty_return' => true,
