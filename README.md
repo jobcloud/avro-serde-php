@@ -504,3 +504,10 @@ make clean                     # stop the platform
 ```
 
 Use `PHP_VERSION=8.5 make ...` to select another PHP version (default: 8.2).
+
+## Agent instructions
+
+Coding agents (e.g. GitHub Copilot) read instructions from the repository root.
+
+- `AGENTS.md` – shared, project-specific instructions for everyone working on this repository (committed).
+- `AGENTS.local.md` – your own personal instructions (listed in `.gitignore`, never committed).
